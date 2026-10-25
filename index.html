@@ -143,6 +143,14 @@ body{margin:0}
     </section>
 
     <section>
+      <div class="label" data-t="secType"></div>
+      <div class="chips" id="ptype">
+        <label class="chip"><input type="checkbox" value="Condominium"><span data-t="condo"></span></label>
+        <label class="chip"><input type="checkbox" value="House / Townhouse"><span data-t="house"></span></label>
+      </div>
+    </section>
+
+    <section>
       <div class="label"><span data-t="secIntent"></span> <span class="req">*</span></div>
       <div class="chips" id="intent">
         <label class="chip"><input id="wantBuy" type="checkbox" value="buy"><span data-t="buy"></span></label>
@@ -162,14 +170,6 @@ body{margin:0}
         <div class="field"><label data-t="beds"></label><div class="chips" data-beds="rent"></div></div>
         <div class="field"><label for="rentBudget" data-t="budgetMonth"></label>
           <div class="money"><input id="rentBudget" type="text" inputmode="numeric" placeholder="25,000"><span class="unit" data-t="thbMonth"></span></div></div>
-      </div>
-    </section>
-
-    <section>
-      <div class="label" data-t="secType"></div>
-      <div class="chips" id="ptype">
-        <label class="chip"><input type="checkbox" value="Condominium"><span data-t="condo"></span></label>
-        <label class="chip"><input type="checkbox" value="House / Townhouse"><span data-t="house"></span></label>
       </div>
     </section>
 
@@ -388,9 +388,9 @@ body{margin:0}
     pair("Phone / โทรศัพท์", d.phone, "Email / อีเมล", d.email);
     pair("LINE / WhatsApp ID", d.chat, "Best way to reach / ช่องทางติดต่อ", d.pref.join(", "));
     heading("Interested  ·  ความสนใจ");
+    full("Property type / ประเภท", d.ptype.join(", ") || "Not specified");
     pair("Buy (bedroom) / ซื้อ", d.buy ? (d.buyBeds.join(", ")||"Any size") : "—", "Rent (bedroom) / เช่า", d.rent ? (d.rentBeds.join(", ")||"Any size") : "—");
     pair("Buy budget (THB) / งบซื้อ", d.buy ? (d.buyBudget||"Not given") : "—", "Rent budget (THB / month) / งบเช่า", d.rent ? (d.rentBudget||"Not given") : "—");
-    full("Property type / ประเภท", d.ptype.join(", ") || "Not specified");
     heading("Additional conditions  ·  เงื่อนไขเพิ่มเติม");
     full("Notes / หมายเหตุ", d.notes);
 
@@ -437,9 +437,9 @@ body{margin:0}
       addField("Email", d.email);
       addField("LINE / WhatsApp", d.chat);
       addField("Best way to reach", d.pref.join(", "));
+      addField("Property type", d.ptype.join(", "));
       addField("Buy", d.buy ? `Yes · ${d.buyBeds.join(", ")||"Any size"} · Budget ${d.buyBudget ? d.buyBudget+" THB" : "not given"}` : "No");
       addField("Rent", d.rent ? `Yes · ${d.rentBeds.join(", ")||"Any size"} · Budget ${d.rentBudget ? d.rentBudget+" THB / month" : "not given"}` : "No");
-      addField("Property type", d.ptype.join(", "));
       addField("Additional conditions", d.notes);
       addField("Agent / referred by", d.agent);
       addField("Source", d.source);
