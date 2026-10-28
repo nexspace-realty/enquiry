@@ -96,6 +96,8 @@ footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-si
 *{box-sizing:border-box}
 body{margin:0}
 [hidden]{display:none!important}
+input[type=date]{font:inherit;font-size:18px;color:var(--ink);background:#fff;border:1.5px solid var(--line);border-radius:6px;padding:10px 12px;min-height:48px;width:100%}
+input[type=date]:focus{border-color:var(--navy);outline:none}
 .sending{position:fixed;inset:0;background:rgba(255,255,255,.92);display:grid;place-items:center;z-index:20;text-align:center;padding:24px}
 .sending div{display:flex;flex-direction:column;gap:14px;align-items:center;color:var(--ink);font-size:18px}
 .spin{width:44px;height:44px;border-radius:50%;border:3px solid var(--navy-soft);border-top-color:var(--navy);animation:sp 1s linear infinite}
@@ -163,14 +165,24 @@ body{margin:0}
         <h3 data-t="buy"></h3>
         <div class="field"><label data-t="beds"></label><div class="chips" data-beds="buy"></div></div>
         <div class="field"><label for="buyBudget" data-t="budget"></label>
-          <div class="money"><input id="buyBudget" type="text" inputmode="numeric" placeholder="5,000,000"><span class="unit" data-t="thb"></span></div></div>
+          <div class="money"><input id="buyBudget" type="text" inputmode="numeric" placeholder="e.g. 5,000,000"><span class="unit" data-t="thb"></span></div></div>
       </div>
 
       <div class="panel" id="rentPanel" hidden>
         <h3 data-t="rent"></h3>
         <div class="field"><label data-t="beds"></label><div class="chips" data-beds="rent"></div></div>
-        <div class="field"><label for="rentBudget" data-t="budgetMonth"></label>
-          <div class="money"><input id="rentBudget" type="text" inputmode="numeric" placeholder="25,000"><span class="unit" data-t="thbMonth"></span></div></div>
+        <div class="field" id="rentBudgetField"><label for="rentBudget"><span data-t="budgetMonth"></span> <span class="req">*</span></label>
+          <div class="money"><input id="rentBudget" type="text" inputmode="numeric" placeholder="e.g. 25,000"><span class="unit" data-t="thbMonth"></span></div>
+          <div class="hint" id="rentBudgetHint" data-t="budgetHint" hidden></div></div>
+        <div class="field"><label data-t="moveIn"></label>
+          <div class="chips" id="moveIn">
+            <label class="chip"><input type="radio" name="moveIn" value="As soon as possible"><span data-t="mvAsap"></span></label>
+            <label class="chip"><input type="radio" name="moveIn" value="Within 1 month"><span data-t="mv1"></span></label>
+            <label class="chip"><input type="radio" name="moveIn" value="In 1-3 months"><span data-t="mv3"></span></label>
+            <label class="chip"><input type="radio" name="moveIn" value="More than 3 months"><span data-t="mvLater"></span></label>
+          </div></div>
+        <div class="field"><label for="moveInDate" data-t="moveInDate"></label>
+          <input id="moveInDate" type="date" style="max-width:260px"></div>
       </div>
     </section>
 
@@ -219,7 +231,7 @@ body{margin:0}
       secClient:"Your details", first:"First name", last:"Last name", phone:"Phone number", email:"Email", chat:"LINE / WhatsApp ID",
       pref:"Best way to reach you", prefCall:"Phone call", prefEmail:"Email",
       secIntent:"I am interested to", buy:"Buy", rent:"Rent", intentHint:"Please choose Buy, Rent, or both.",
-      beds:"Bedrooms", budget:"Budget", budgetMonth:"Budget per month", thb:"THB", thbMonth:"THB / month",
+      beds:"Bedrooms", budget:"Budget", budgetMonth:"Budget per month", thb:"THB", thbMonth:"THB / month", budgetHint:"Please enter your monthly budget.", moveIn:"When do you plan to move in?", mvAsap:"As soon as possible", mv1:"Within 1 month", mv3:"In 1–3 months", mvLater:"More than 3 months", moveInDate:"Preferred move-in date (if known)",
       bedNames:["Studio","1 Bed","2 Beds","3 Beds","4+ Beds"],
       secType:"Property type", condo:"Condominium", house:"House / Townhouse",
       secNotes:"Additional conditions", notesHint:"Preferred area, move-in date, pets, parking, anything else",
@@ -234,7 +246,7 @@ body{margin:0}
       secClient:"ข้อมูลของท่าน", first:"ชื่อ", last:"นามสกุล", phone:"เบอร์โทรศัพท์", email:"อีเมล", chat:"LINE / WhatsApp ID",
       pref:"ช่องทางที่สะดวกให้ติดต่อ", prefCall:"โทรศัพท์", prefEmail:"อีเมล",
       secIntent:"สนใจ", buy:"ซื้อ", rent:"เช่า", intentHint:"กรุณาเลือก ซื้อ เช่า หรือทั้งสองอย่าง",
-      beds:"จำนวนห้องนอน", budget:"งบประมาณ", budgetMonth:"งบประมาณต่อเดือน", thb:"บาท", thbMonth:"บาท / เดือน",
+      beds:"จำนวนห้องนอน", budget:"งบประมาณ", budgetMonth:"งบประมาณต่อเดือน", thb:"บาท", thbMonth:"บาท / เดือน", budgetHint:"กรุณาระบุงบประมาณต่อเดือน", moveIn:"วางแผนย้ายเข้าเมื่อไหร่", mvAsap:"เร็วที่สุด", mv1:"ภายใน 1 เดือน", mv3:"1–3 เดือน", mvLater:"มากกว่า 3 เดือน", moveInDate:"วันที่ต้องการย้ายเข้า (ถ้าทราบ)",
       bedNames:["สตูดิโอ","1 ห้องนอน","2 ห้องนอน","3 ห้องนอน","4+ ห้องนอน"],
       secType:"ประเภทอสังหาริมทรัพย์", condo:"คอนโดมิเนียม", house:"บ้าน / ทาวน์เฮาส์",
       secNotes:"เงื่อนไขเพิ่มเติม", notesHint:"ทำเลที่ต้องการ วันที่ต้องการเข้าอยู่ สัตว์เลี้ยง ที่จอดรถ หรืออื่น ๆ",
@@ -326,6 +338,7 @@ body{margin:0}
       buy:$("#wantBuy").checked, rent:$("#wantRent").checked,
       buyBeds:checked('[data-beds="buy"]'), rentBeds:checked('[data-beds="rent"]'),
       buyBudget:v("#buyBudget"), rentBudget:v("#rentBudget"),
+      moveIn:(document.querySelector('#moveIn input:checked')||{}).value||"", moveInDate:v("#moveInDate"),
       ptype:checked("#ptype"), notes:v("#notes"),
       agent:AGENT, source:SOURCE || "Online form",
       lang, date:new Date()
@@ -341,15 +354,19 @@ body{margin:0}
     });
     const intent = $("#wantBuy").checked || $("#wantRent").checked;
     $("#intentHint").hidden = intent; if(!intent) ok=false;
+    const rentBad = $("#wantRent").checked && !$("#rentBudget").value.trim();
+    $("#rentBudgetField").classList.toggle("invalid", rentBad); $("#rentBudgetHint").hidden = !rentBad; if(rentBad) ok=false;
     $("#consentHint").hidden = $("#consent").checked; if(!$("#consent").checked) ok=false;
     $("#formErr").textContent = t("formErr");
     $("#formErr").hidden = ok;
     return ok;
   }
   document.querySelectorAll("#first,#last,#phone").forEach(i=>i.addEventListener("input",()=>i.closest(".field").classList.remove("invalid")));
+  $("#rentBudget").addEventListener("input",()=>{ if($("#rentBudget").value.trim()){ $("#rentBudgetField").classList.remove("invalid"); $("#rentBudgetHint").hidden=true; } });
   $("#consent").addEventListener("change",()=>{ if($("#consent").checked) $("#consentHint").hidden=true; });
 
   // ---------- PDF (drawn on canvas so Thai prints correctly) ----------
+  const fmtD = iso => { const [y,m,dd] = iso.split("-").map(Number); return new Date(y,m-1,dd).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"}); };
   async function buildPdf(d, sigUrl){
     try{ await Promise.all(['300 20px "Jost"','400 20px "Jost"','500 20px "Jost"','600 20px "Jost"','400 20px "Noto Sans Thai"'].map(f=>document.fonts.load(f, "ก"))); }catch(e){}
     const W=1240, H=1754, M=110;
@@ -391,6 +408,7 @@ body{margin:0}
     full("Property type / ประเภท", d.ptype.join(", ") || "Not specified");
     pair("Buy (bedroom) / ซื้อ", d.buy ? (d.buyBeds.join(", ")||"Any size") : "—", "Rent (bedroom) / เช่า", d.rent ? (d.rentBeds.join(", ")||"Any size") : "—");
     pair("Buy budget (THB) / งบซื้อ", d.buy ? (d.buyBudget||"Not given") : "—", "Rent budget (THB / month) / งบเช่า", d.rent ? (d.rentBudget||"Not given") : "—");
+    if (d.rent) full("Rent move-in / แผนย้ายเข้า", [d.moveIn, d.moveInDate ? "Preferred date: "+fmtD(d.moveInDate) : ""].filter(Boolean).join("  ·  ") || "Not specified");
     heading("Additional conditions  ·  เงื่อนไขเพิ่มเติม");
     full("Notes / หมายเหตุ", d.notes);
 
@@ -439,7 +457,7 @@ body{margin:0}
       addField("Best way to reach", d.pref.join(", "));
       addField("Property type", d.ptype.join(", "));
       addField("Buy", d.buy ? `Yes · ${d.buyBeds.join(", ")||"Any size"} · Budget ${d.buyBudget ? d.buyBudget+" THB" : "not given"}` : "No");
-      addField("Rent", d.rent ? `Yes · ${d.rentBeds.join(", ")||"Any size"} · Budget ${d.rentBudget ? d.rentBudget+" THB / month" : "not given"}` : "No");
+      addField("Rent", d.rent ? `Yes · ${d.rentBeds.join(", ")||"Any size"} · Budget ${d.rentBudget} THB / month · Move-in: ${d.moveIn||"not specified"}${d.moveInDate ? " (preferred date "+fmtD(d.moveInDate)+")" : ""}` : "No");
       addField("Additional conditions", d.notes);
       addField("Agent / referred by", d.agent);
       addField("Source", d.source);
