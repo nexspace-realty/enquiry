@@ -240,7 +240,7 @@ input[type=date]:focus{border-color:var(--navy);outline:none}
       secSig:"Signature", sigHint:"Sign with your finger", clear:"Clear",
       consent:"I agree that Nexspace Realty Co., Ltd may keep these details and contact me about properties that match my enquiry.",
       consentHint:"Please tick the box to continue.",
-      formErr:"Some required details are missing. They are marked in red above.", pdfErr:"Something went wrong. Please try again, or contact us on LINE @NEXSPACE.",
+      formErr:"Some required details are missing. They are marked in red above.", pdfErr:"Something went wrong. Please try again, or contact us on LINE @NEXSPACE.", sendErr:"We couldn't send your enquiry just now. Your answers are still here, so please tap Submit again. If it keeps failing, contact us on LINE @NEXSPACE or call 064 164 2459.",
       submit:"Submit enquiry", sending:"Sending your enquiry…"
     },
     th:{
@@ -255,7 +255,7 @@ input[type=date]:focus{border-color:var(--navy);outline:none}
       secSig:"ลายมือชื่อ", sigHint:"เซ็นชื่อด้วยนิ้ว", clear:"ล้าง",
       consent:"ข้าพเจ้ายินยอมให้ บริษัท เน็กซ์สเปซ เรียลตี้ จำกัด เก็บข้อมูลนี้ และติดต่อข้าพเจ้าเกี่ยวกับอสังหาริมทรัพย์ที่ตรงกับความต้องการ",
       consentHint:"กรุณาทำเครื่องหมายเพื่อดำเนินการต่อ",
-      formErr:"ยังกรอกข้อมูลที่จำเป็นไม่ครบ กรุณาตรวจสอบช่องที่เป็นสีแดงด้านบน", pdfErr:"เกิดข้อผิดพลาด กรุณาลองอีกครั้ง หรือติดต่อเราทาง LINE @NEXSPACE",
+      formErr:"ยังกรอกข้อมูลที่จำเป็นไม่ครบ กรุณาตรวจสอบช่องที่เป็นสีแดงด้านบน", pdfErr:"เกิดข้อผิดพลาด กรุณาลองอีกครั้ง หรือติดต่อเราทาง LINE @NEXSPACE", sendErr:"ขออภัย ระบบยังส่งข้อมูลไม่สำเร็จ ข้อมูลที่กรอกไว้ยังอยู่ครบ กรุณากด ส่งข้อมูล อีกครั้ง หากยังไม่สำเร็จ ติดต่อเราทาง LINE @NEXSPACE หรือโทร 064 164 2459",
       submit:"ส่งข้อมูล", sending:"กำลังส่งข้อมูล…"
     }
   };
@@ -446,49 +446,76 @@ input[type=date]:focus{border-color:var(--navy);outline:none}
   }
 
   // ---------- Deliver by email ----------
+  // Primary: Google Apps Script (emails both addresses + saves a row in the Nexspace Enquiries sheet).
+  // Fallback while ENDPOINT is empty: FormSubmit.
+  const ENDPOINT = "";
   function addField(name, value){
     const i=document.createElement("input"); i.type="hidden"; i.name=name; i.value=value||"—";
     $("#m_fields").appendChild(i);
   }
+  const blobToBase64 = b => new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(String(r.result).split(",")[1]); r.onerror=rej; r.readAsDataURL(b); });
+  function showSendError(){
+    $("#sending").hidden=true; $("#submitBtn").disabled=false;
+    $("#formErr").textContent=t("sendErr"); $("#formErr").hidden=false;
+    $("#formErr").scrollIntoView({behavior:"smooth",block:"center"});
+  }
   $("#f").addEventListener("submit", async e=>{
     e.preventDefault();
     if(!validate()){ const first=document.querySelector(".field.invalid input, .hint:not([hidden])"); first && first.scrollIntoView({behavior:"smooth",block:"center"}); return; }
-    const btn=$("#submitBtn"); btn.disabled=true;
+    const btn=$("#submitBtn"); btn.disabled=true; $("#formErr").hidden=true;
     $("#sendingText").textContent=t("sending"); $("#sending").hidden=false;
+    let d, fields, subject, blob=null, filename="";
     try{
-      const d=collect();
-      $("#m_fields").innerHTML="";
-      addField("Name", `${d.first} ${d.last}`);
-      addField("Phone", d.phone);
-      addField("Email", d.email);
-      addField("LINE / WhatsApp", d.chat);
-      addField("Best way to reach", d.pref.join(", "));
-      addField("Property type", d.ptype.join(", "));
-      addField("Buy", d.buy ? `Yes · ${d.buyBeds.join(", ")||"Any size"} · Budget ${d.buyBudget} THB` : "No");
-      addField("Rent", d.rent ? `Yes · ${d.rentBeds.join(", ")||"Any size"} · Budget ${d.rentBudget} THB / month · Move-in: ${d.moveIn||"not specified"}${d.moveInDate ? " (preferred date "+fmtD(d.moveInDate)+")" : ""}` : "No");
-      addField("Additional conditions", d.notes);
-      addField("Agent / referred by", d.agent);
-      addField("Source", d.source);
-      addField("Form language", d.lang==="th" ? "Thai" : "English");
-      addField("Signed", hasSig ? "Yes (see attached PDF)" : "No signature");
-      addField("Submitted", d.date.toLocaleString("en-GB",{timeZone:"Asia/Bangkok",dateStyle:"medium",timeStyle:"short"})+" (Bangkok)");
-      $("#m_subject").value = `New enquiry: ${d.first} ${d.last}` + (d.buy&&d.rent ? " (Buy + Rent)" : d.buy ? " (Buy)" : " (Rent)");
-      $("#m_next").value = new URL("thanks.html?lang="+d.lang, location.href).href;
-
-      // Attach the PDF; if this browser can't attach files, the email still carries every answer.
+      d=collect();
+      fields = {
+        "Submitted": d.date.toLocaleString("en-GB",{timeZone:"Asia/Bangkok",dateStyle:"medium",timeStyle:"short"})+" (Bangkok)",
+        "Name": `${d.first} ${d.last}`,
+        "Phone": d.phone,
+        "Email": d.email,
+        "LINE / WhatsApp": d.chat,
+        "Best way to reach": d.pref.join(", "),
+        "Property type": d.ptype.join(", "),
+        "Buy": d.buy ? `Yes · ${d.buyBeds.join(", ")||"Any size"} · Budget ${d.buyBudget} THB` : "No",
+        "Rent": d.rent ? `Yes · ${d.rentBeds.join(", ")||"Any size"} · Budget ${d.rentBudget} THB / month · Move-in: ${d.moveIn||"not specified"}${d.moveInDate ? " (preferred date "+fmtD(d.moveInDate)+")" : ""}` : "No",
+        "Additional conditions": d.notes,
+        "Agent / referred by": d.agent,
+        "Source": d.source,
+        "Form language": d.lang==="th" ? "Thai" : "English",
+        "Signed": hasSig ? "Yes (see attached PDF)" : "No signature"
+      };
+      subject = `New enquiry: ${d.first} ${d.last}` + (d.buy&&d.rent ? " (Buy + Rent)" : d.buy ? " (Buy)" : " (Rent)");
       try{
-        const blob = await buildPdf(d, hasSig ? sig.toDataURL("image/png") : null);
+        blob = await buildPdf(d, hasSig ? sig.toDataURL("image/png") : null);
         const safe = s => s.replace(/[\\/:*?"<>|]+/g,"").trim();
-        const file = new File([blob], `Nexspace Enquiry - ${safe(d.first)} ${safe(d.last)} - ${d.date.toISOString().slice(0,10)}.pdf`, {type:"application/pdf"});
-        const dt = new DataTransfer(); dt.items.add(file); $("#m_file").files = dt.files;
-      }catch(err){ $("#m_file").value=""; }
-
+        filename = `Nexspace Enquiry - ${safe(d.first)} ${safe(d.last)} - ${d.date.toISOString().slice(0,10)}.pdf`;
+      }catch(err){ blob=null; }
       try{ localStorage.setItem("nx-lang", d.lang); }catch(e){}
-      HTMLFormElement.prototype.submit.call($("#mailer"));
-    }catch(err){
-      $("#sending").hidden=true; btn.disabled=false;
-      $("#formErr").textContent=t("pdfErr"); $("#formErr").hidden=false;
+    }catch(err){ showSendError(); return; }
+
+    const thanksUrl = new URL("thanks.html?lang="+d.lang, location.href).href;
+
+    if (ENDPOINT && !ENDPOINT.startsWith("{{")) {
+      const ctrl = new AbortController(); const timer = setTimeout(()=>ctrl.abort(), 45000);
+      try{
+        const payload = { fields, subject, filename, pdfBase64: blob ? await blobToBase64(blob) : "" };
+        // text/plain keeps this a "simple" request, so the browser needs no CORS pre-check.
+        const r = await fetch(ENDPOINT, { method:"POST", body: JSON.stringify(payload), headers:{ "Content-Type":"text/plain;charset=utf-8" }, signal: ctrl.signal, redirect:"follow" });
+        const out = await r.json().catch(()=>({}));
+        clearTimeout(timer);
+        if (out && out.ok) { location.href = thanksUrl; return; }
+        showSendError(); return;
+      }catch(err){ clearTimeout(timer); showSendError(); return; }
     }
+
+    // Fallback: FormSubmit
+    try{
+      $("#m_fields").innerHTML="";
+      Object.entries(fields).forEach(([k,v])=>addField(k,v));
+      $("#m_subject").value = subject;
+      $("#m_next").value = thanksUrl;
+      if (blob) { try{ const dt = new DataTransfer(); dt.items.add(new File([blob], filename, {type:"application/pdf"})); $("#m_file").files = dt.files; }catch(err){ $("#m_file").value=""; } }
+      HTMLFormElement.prototype.submit.call($("#mailer"));
+    }catch(err){ showSendError(); }
   });
   // Coming back with the browser's back button: clear the overlay
   window.addEventListener("pageshow", ()=>{ $("#sending").hidden=true; $("#submitBtn").disabled=false; });
