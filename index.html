@@ -448,7 +448,7 @@ input[type=date]:focus{border-color:var(--navy);outline:none}
   // ---------- Deliver by email ----------
   // Primary: Google Apps Script (emails both addresses + saves a row in the Nexspace Enquiries sheet).
   // Fallback while ENDPOINT is empty: FormSubmit.
-  const ENDPOINT = "";
+  const ENDPOINT = "https://script.google.com/macros/s/AKfycbzpESh66KvULe5CZXtK1XHEvarsO7szpsCNSzxU30Hv1oq8sbGKHzQI-Z-PfxdA_xeW/exec";
   function addField(name, value){
     const i=document.createElement("input"); i.type="hidden"; i.name=name; i.value=value||"—";
     $("#m_fields").appendChild(i);
@@ -499,7 +499,7 @@ input[type=date]:focus{border-color:var(--navy);outline:none}
       try{
         const payload = { fields, subject, filename, pdfBase64: blob ? await blobToBase64(blob) : "" };
         // text/plain keeps this a "simple" request, so the browser needs no CORS pre-check.
-        const r = await fetch(ENDPOINT, { method:"POST", body: JSON.stringify(payload), headers:{ "Content-Type":"text/plain;charset=utf-8" }, signal: ctrl.signal, redirect:"follow" });
+        const r = await fetch(ENDPOINT, { method:"POST", body: JSON.stringify(payload), headers:{ "Content-Type":"text/plain;charset=utf-8" }, signal: ctrl.signal, redirect:"follow", credentials:"omit" });
         const out = await r.json().catch(()=>({}));
         clearTimeout(timer);
         if (out && out.ok) { location.href = thanksUrl; return; }
