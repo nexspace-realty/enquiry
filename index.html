@@ -172,6 +172,28 @@ input[type=date]:focus{border-color:var(--navy);outline:none}
       <div class="panel" id="rentPanel" hidden>
         <h3 data-t="rent"></h3>
         <div class="field"><label data-t="beds"></label><div class="chips" data-beds="rent"></div></div>
+        <div class="field" id="natField"><label for="nationality"><span data-t="nationality"></span> <span class="req">*</span></label>
+          <input id="nationality" type="text" list="natList" autocomplete="off" autocapitalize="words">
+          <datalist id="natList"><option value="Thai"><option value="Chinese"><option value="Japanese"><option value="Korean"><option value="Indian"><option value="Singaporean"><option value="Malaysian"><option value="Filipino"><option value="Vietnamese"><option value="Taiwanese"><option value="Hong Konger"><option value="American"><option value="British"><option value="Australian"><option value="French"><option value="German"><option value="Russian"></datalist>
+          <div class="hint" id="natHint" data-t="natHint" hidden></div></div>
+        <div class="field" id="visaField"><label><span data-t="visa"></span> <span class="req">*</span></label>
+          <div class="chips" id="visa">
+            <label class="chip"><input type="radio" name="visa" value="Thai citizen (no visa needed)"><span data-t="vThai"></span></label>
+            <label class="chip"><input type="radio" name="visa" value="Work visa (Non-B) / Work permit"><span data-t="vWork"></span></label>
+            <label class="chip"><input type="radio" name="visa" value="Retirement (Non-O / O-A)"><span data-t="vRetire"></span></label>
+            <label class="chip"><input type="radio" name="visa" value="Marriage / Family (Non-O)"><span data-t="vFamily"></span></label>
+            <label class="chip"><input type="radio" name="visa" value="Education (ED)"><span data-t="vEdu"></span></label>
+            <label class="chip"><input type="radio" name="visa" value="DTV (Destination Thailand Visa)"><span data-t="vDtv"></span></label>
+            <label class="chip"><input type="radio" name="visa" value="LTR visa"><span data-t="vLtr"></span></label>
+            <label class="chip"><input type="radio" name="visa" value="Thailand Privilege (Elite)"><span data-t="vElite"></span></label>
+            <label class="chip"><input type="radio" name="visa" value="Tourist / Visa exemption"><span data-t="vTourist"></span></label>
+            <label class="chip"><input type="radio" name="visa" value="Other"><span data-t="vOther"></span></label>
+          </div>
+          <input id="visaOther" type="text" hidden>
+          <div class="hint" id="visaHint" data-t="visaHint" hidden></div></div>
+        <div class="field" id="occField"><label for="occupation"><span data-t="occupation"></span> <span class="req">*</span></label>
+          <input id="occupation" type="text" autocapitalize="sentences">
+          <div class="hint" id="occHint" data-t="occHint" hidden></div></div>
         <div class="field" id="rentBudgetField"><label for="rentBudget"><span data-t="budgetMonth"></span> <span class="req">*</span></label>
           <div class="money"><input id="rentBudget" type="text" inputmode="numeric" placeholder="e.g. 25,000"><span class="unit" data-t="thbMonth"></span></div>
           <div class="hint" id="rentBudgetHint" data-t="budgetHint" hidden></div></div>
@@ -233,7 +255,7 @@ input[type=date]:focus{border-color:var(--navy);outline:none}
       secClient:"Your details", first:"First name", last:"Last name", phone:"Phone number", email:"Email", chat:"LINE / WhatsApp ID",
       pref:"Best way to reach you", prefCall:"Phone call", prefEmail:"Email",
       secIntent:"I am interested to", buy:"Buy", rent:"Rent", intentHint:"Please choose Buy, Rent, or both.",
-      beds:"Bedrooms", budget:"Budget", budgetMonth:"Budget per month", thb:"THB", thbMonth:"THB / month", budgetHint:"Please enter your monthly budget.", buyBudgetHint:"Please enter your budget.", moveInHint:"Please choose when you plan to move in.", moveIn:"When do you plan to move in?", mvAsap:"As soon as possible", mv1:"Within 1 month", mv3:"In 1–3 months", mvLater:"More than 3 months", moveInDate:"Preferred move-in date (if known)",
+      beds:"Bedrooms", nationality:"Nationality", natHint:"Please enter your nationality.", visa:"Visa type", visaHint:"Please choose your visa type.", occupation:"Occupation", occHint:"Please enter your occupation.", occPh:"e.g. Engineer at ABC Co., Ltd.", natPh:"e.g. Japanese", visaOtherPh:"Please specify your visa type", vThai:"Thai citizen (no visa needed)", vWork:"Work visa (Non-B)", vRetire:"Retirement (Non-O / O-A)", vFamily:"Marriage / Family (Non-O)", vEdu:"Education (ED)", vDtv:"DTV", vLtr:"LTR", vElite:"Thailand Privilege (Elite)", vTourist:"Tourist / Visa exemption", vOther:"Other", budget:"Budget", budgetMonth:"Budget per month", thb:"THB", thbMonth:"THB / month", budgetHint:"Please enter your monthly budget.", buyBudgetHint:"Please enter your budget.", moveInHint:"Please choose when you plan to move in.", moveIn:"When do you plan to move in?", mvAsap:"As soon as possible", mv1:"Within 1 month", mv3:"In 1–3 months", mvLater:"More than 3 months", moveInDate:"Preferred move-in date (if known)",
       bedNames:["Studio","1 Bed","2 Beds","3 Beds","4+ Beds"],
       secType:"Property type", condo:"Condominium", house:"House / Townhouse",
       secNotes:"Additional conditions", notesHint:"Preferred area, move-in date, pets, parking, anything else",
@@ -248,7 +270,7 @@ input[type=date]:focus{border-color:var(--navy);outline:none}
       secClient:"ข้อมูลของท่าน", first:"ชื่อ", last:"นามสกุล", phone:"เบอร์โทรศัพท์", email:"อีเมล", chat:"LINE / WhatsApp ID",
       pref:"ช่องทางที่สะดวกให้ติดต่อ", prefCall:"โทรศัพท์", prefEmail:"อีเมล",
       secIntent:"สนใจ", buy:"ซื้อ", rent:"เช่า", intentHint:"กรุณาเลือก ซื้อ เช่า หรือทั้งสองอย่าง",
-      beds:"จำนวนห้องนอน", budget:"งบประมาณ", budgetMonth:"งบประมาณต่อเดือน", thb:"บาท", thbMonth:"บาท / เดือน", budgetHint:"กรุณาระบุงบประมาณต่อเดือน", buyBudgetHint:"กรุณาระบุงบประมาณ", moveInHint:"กรุณาเลือกช่วงเวลาที่วางแผนย้ายเข้า", moveIn:"วางแผนย้ายเข้าเมื่อไหร่", mvAsap:"เร็วที่สุด", mv1:"ภายใน 1 เดือน", mv3:"1–3 เดือน", mvLater:"มากกว่า 3 เดือน", moveInDate:"วันที่ต้องการย้ายเข้า (ถ้าทราบ)",
+      beds:"จำนวนห้องนอน", nationality:"สัญชาติ", natHint:"กรุณาระบุสัญชาติ", visa:"ประเภทวีซ่า", visaHint:"กรุณาเลือกประเภทวีซ่า", occupation:"อาชีพ", occHint:"กรุณาระบุอาชีพ", occPh:"เช่น วิศวกร บริษัท ABC จำกัด", natPh:"เช่น ไทย", visaOtherPh:"กรุณาระบุประเภทวีซ่า", vThai:"สัญชาติไทย (ไม่ต้องใช้วีซ่า)", vWork:"วีซ่าทำงาน (Non-B)", vRetire:"วีซ่าเกษียณ (Non-O / O-A)", vFamily:"วีซ่าแต่งงาน / ครอบครัว (Non-O)", vEdu:"วีซ่านักเรียน (ED)", vDtv:"DTV", vLtr:"LTR", vElite:"Thailand Privilege (Elite)", vTourist:"ท่องเที่ยว / ยกเว้นวีซ่า", vOther:"อื่น ๆ", budget:"งบประมาณ", budgetMonth:"งบประมาณต่อเดือน", thb:"บาท", thbMonth:"บาท / เดือน", budgetHint:"กรุณาระบุงบประมาณต่อเดือน", buyBudgetHint:"กรุณาระบุงบประมาณ", moveInHint:"กรุณาเลือกช่วงเวลาที่วางแผนย้ายเข้า", moveIn:"วางแผนย้ายเข้าเมื่อไหร่", mvAsap:"เร็วที่สุด", mv1:"ภายใน 1 เดือน", mv3:"1–3 เดือน", mvLater:"มากกว่า 3 เดือน", moveInDate:"วันที่ต้องการย้ายเข้า (ถ้าทราบ)",
       bedNames:["สตูดิโอ","1 ห้องนอน","2 ห้องนอน","3 ห้องนอน","4+ ห้องนอน"],
       secType:"ประเภทอสังหาริมทรัพย์", condo:"คอนโดมิเนียม", house:"บ้าน / ทาวน์เฮาส์",
       secNotes:"เงื่อนไขเพิ่มเติม", notesHint:"ทำเลที่ต้องการ วันที่ต้องการเข้าอยู่ สัตว์เลี้ยง ที่จอดรถ หรืออื่น ๆ",
@@ -282,6 +304,7 @@ input[type=date]:focus{border-color:var(--navy);outline:none}
     document.querySelectorAll("[data-t]").forEach(el=>{ const v=T[lang][el.dataset.t]; if(typeof v==="string") el.textContent=v; });
     document.querySelectorAll("[data-bed]").forEach(el=>el.textContent=T[lang].bedNames[+el.dataset.bed]);
     $("#formErr").textContent = t("formErr");
+    $("#occupation").placeholder = t("occPh"); $("#nationality").placeholder = t("natPh"); $("#visaOther").placeholder = t("visaOtherPh");
     $("#lang-en").setAttribute("aria-pressed", lang==="en");
     $("#lang-th").setAttribute("aria-pressed", lang==="th");
     $("#today").textContent = new Date().toLocaleDateString(lang==="th"?"th-TH":"en-GB",{day:"numeric",month:"short",year:"numeric"});
@@ -340,7 +363,9 @@ input[type=date]:focus{border-color:var(--navy);outline:none}
       buy:$("#wantBuy").checked, rent:$("#wantRent").checked,
       buyBeds:checked('[data-beds="buy"]'), rentBeds:checked('[data-beds="rent"]'),
       buyBudget:v("#buyBudget"), rentBudget:v("#rentBudget"),
-      moveIn:(document.querySelector('#moveIn input:checked')||{}).value||"", moveInDate:v("#moveInDate"),
+      moveIn:(document.querySelector('#moveIn input:checked')||{}).value||"",
+      nationality:v("#nationality"), occupation:v("#occupation"),
+      visa:(()=>{ const c=(document.querySelector('#visa input:checked')||{}).value||""; return c==="Other" ? ("Other: "+(v("#visaOther")||"not specified")) : c; })(), moveInDate:v("#moveInDate"),
       ptype:checked("#ptype"), notes:v("#notes"),
       agent:AGENT, source:SOURCE || "Online form",
       lang, date:new Date()
@@ -362,12 +387,21 @@ input[type=date]:focus{border-color:var(--navy);outline:none}
     $("#buyBudgetField").classList.toggle("invalid", buyBad); $("#buyBudgetHint").hidden = !buyBad; if(buyBad) ok=false;
     const mvBad = $("#wantRent").checked && !document.querySelector("#moveIn input:checked");
     $("#moveInHint").hidden = !mvBad; if(mvBad) ok=false;
+    const R = $("#wantRent").checked;
+    const natBad = R && !$("#nationality").value.trim();
+    $("#natField").classList.toggle("invalid", natBad); $("#natHint").hidden = !natBad; if(natBad) ok=false;
+    const visaBad = R && !document.querySelector("#visa input:checked");
+    $("#visaHint").hidden = !visaBad; if(visaBad) ok=false;
+    const occBad = R && !$("#occupation").value.trim();
+    $("#occField").classList.toggle("invalid", occBad); $("#occHint").hidden = !occBad; if(occBad) ok=false;
     $("#consentHint").hidden = $("#consent").checked; if(!$("#consent").checked) ok=false;
     $("#formErr").textContent = t("formErr");
     $("#formErr").hidden = ok;
     return ok;
   }
   document.querySelectorAll("#first,#last,#phone").forEach(i=>i.addEventListener("input",()=>i.closest(".field").classList.remove("invalid")));
+  [["#nationality","#natField","#natHint"],["#occupation","#occField","#occHint"]].forEach(([i,f,h])=>$(i).addEventListener("input",()=>{ if($(i).value.trim()){ $(f).classList.remove("invalid"); $(h).hidden=true; } }));
+  document.querySelectorAll("#visa input").forEach(i=>i.addEventListener("change",()=>{ $("#visaHint").hidden=true; $("#visaOther").hidden = i.value!=="Other"; if(i.value==="Other") $("#visaOther").focus(); }));
   $("#buyBudget").addEventListener("input",()=>{ if($("#buyBudget").value.trim()){ $("#buyBudgetField").classList.remove("invalid"); $("#buyBudgetHint").hidden=true; } });
   document.querySelectorAll("#moveIn input").forEach(i=>i.addEventListener("change",()=>$("#moveInHint").hidden=true));
   $("#rentBudget").addEventListener("input",()=>{ if($("#rentBudget").value.trim()){ $("#rentBudgetField").classList.remove("invalid"); $("#rentBudgetHint").hidden=true; } });
@@ -388,9 +422,9 @@ input[type=date]:focus{border-color:var(--navy);outline:none}
     g.fillText("N E X S P A C E   R E A L T Y", W/2, 150);
     g.fillStyle=INK; g.font=F(300,56); g.fillText("ENQUIRY REGISTRATION", W/2, 225);
     g.textAlign="left";
-    let y=310;
+    let y=295;
     function heading(txt){ g.fillStyle=INK; g.font=F(600,22); g.fillText(txt.toUpperCase(), M, y); y+=16;
-      g.strokeStyle=LINE; g.lineWidth=1.5; g.beginPath(); g.moveTo(M,y); g.lineTo(W-M,y); g.stroke(); y+=44; }
+      g.strokeStyle=LINE; g.lineWidth=1.5; g.beginPath(); g.moveTo(M,y); g.lineTo(W-M,y); g.stroke(); y+=40; }
     function wrap(text, maxW){
       const out=[]; String(text).split(/\n/).forEach(par=>{
         const words=par.split(/(\s+)/); let line="";
@@ -398,15 +432,17 @@ input[type=date]:focus{border-color:var(--navy);outline:none}
         out.push(line.trim());
       }); return out;
     }
-    function row(label, value, x, w){
+    function row(label, value, x, w, maxLines){
       g.fillStyle=MUTED; g.font=F(400,20); g.fillText(label, x, y);
       g.fillStyle=INK; g.font=F(400,28);
-      const lines = wrap(value||"—", w); lines.slice(0,4).forEach((l,i)=>g.fillText(l, x, y+38+i*36));
-      return 38 + Math.min(lines.length,4)*36;
+      const lines = wrap(value||"—", w); const n = maxLines||3; let shown = lines.slice(0,n);
+      if (lines.length > n) { let last = shown[n-1]; while (last && g.measureText(last+" …").width > w) last = last.slice(0,-1); shown[n-1] = last+" …"; }
+      shown.forEach((l,i)=>g.fillText(l, x, y+38+i*36));
+      return 38 + shown.length*36;
     }
     const colW=(W-2*M-60)/2, x2=M+colW+60;
-    function pair(l1,v1,l2,v2){ const h=Math.max(row(l1,v1,M,colW), row(l2,v2,x2,colW)); y+=h+26; }
-    function full(l,v){ const h=row(l,v,M,W-2*M); y+=h+26; }
+    function pair(l1,v1,l2,v2){ const h=Math.max(row(l1,v1,M,colW), row(l2,v2,x2,colW)); y+=h+18; }
+    function full(l,v,maxLines){ const h=row(l,v,M,W-2*M,maxLines); y+=h+18; }
 
     heading("Client details  ·  ข้อมูลลูกค้า");
     pair("First name / ชื่อ", d.first, "Last name / นามสกุล", d.last);
@@ -414,13 +450,16 @@ input[type=date]:focus{border-color:var(--navy);outline:none}
     pair("LINE / WhatsApp ID", d.chat, "Best way to reach / ช่องทางติดต่อ", d.pref.join(", "));
     heading("Interested  ·  ความสนใจ");
     full("Property type / ประเภท", d.ptype.join(", ") || "Not specified");
-    pair("Buy (bedroom) / ซื้อ", d.buy ? (d.buyBeds.join(", ")||"Any size") : "—", "Rent (bedroom) / เช่า", d.rent ? (d.rentBeds.join(", ")||"Any size") : "—");
-    pair("Buy budget (THB) / งบซื้อ", d.buy ? (d.buyBudget||"Not given") : "—", "Rent budget (THB / month) / งบเช่า", d.rent ? (d.rentBudget||"Not given") : "—");
-    if (d.rent) full("Rent move-in / แผนย้ายเข้า", [d.moveIn, d.moveInDate ? "Preferred date: "+fmtD(d.moveInDate) : ""].filter(Boolean).join("  ·  ") || "Not specified");
+    if (d.buy) pair("Buy: bedrooms / ซื้อ: ห้องนอน", d.buyBeds.join(", ")||"Any size", "Buy budget (THB) / งบซื้อ", d.buyBudget||"Not given");
+    if (d.rent) {
+      pair("Rent: bedrooms / เช่า: ห้องนอน", d.rentBeds.join(", ")||"Any size", "Rent budget (THB / month) / งบเช่า", d.rentBudget||"Not given");
+      pair("Nationality / สัญชาติ", d.nationality, "Visa type / ประเภทวีซ่า", d.visa);
+      pair("Occupation / อาชีพ", d.occupation, "Move-in / แผนย้ายเข้า", [d.moveIn, d.moveInDate ? "Preferred: "+fmtD(d.moveInDate) : ""].filter(Boolean).join(" · ") || "Not specified");
+    }
     heading("Additional conditions  ·  เงื่อนไขเพิ่มเติม");
-    full("Notes / หมายเหตุ", d.notes);
+    full("Notes / หมายเหตุ", d.notes, Math.max(1, Math.min(4, Math.floor((1385 - y - 38 - 18) / 36))));
 
-    y = Math.max(y, 1300);
+    y = Math.min(Math.max(y, 1300), 1395);
     g.fillStyle=MUTED; g.font=F(400,20); g.fillText("Client signature / ลายมือชื่อ", M, y);
     g.fillText("Date / วันที่", x2, y);
     if (sigUrl){ const im=await new Promise(r=>{const i=new Image(); i.onload=()=>r(i); i.onerror=()=>r(null); i.src=sigUrl;});
@@ -476,7 +515,7 @@ input[type=date]:focus{border-color:var(--navy);outline:none}
         "Best way to reach": d.pref.join(", "),
         "Property type": d.ptype.join(", "),
         "Buy": d.buy ? `Yes · ${d.buyBeds.join(", ")||"Any size"} · Budget ${d.buyBudget} THB` : "No",
-        "Rent": d.rent ? `Yes · ${d.rentBeds.join(", ")||"Any size"} · Budget ${d.rentBudget} THB / month · Move-in: ${d.moveIn||"not specified"}${d.moveInDate ? " (preferred date "+fmtD(d.moveInDate)+")" : ""}` : "No",
+        "Rent": d.rent ? `Yes · Nationality: ${d.nationality} · Visa: ${d.visa} · Occupation: ${d.occupation} · ${d.rentBeds.join(", ")||"Any size"} · Budget ${d.rentBudget} THB / month · Move-in: ${d.moveIn||"not specified"}${d.moveInDate ? " (preferred date "+fmtD(d.moveInDate)+")" : ""}` : "No",
         "Additional conditions": d.notes,
         "Agent / referred by": d.agent,
         "Source": d.source,
