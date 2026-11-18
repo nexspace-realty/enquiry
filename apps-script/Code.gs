@@ -10,17 +10,16 @@
  *   row in the "Enquiries" tab, PDF in Drive folder "Nexspace Enquiry PDFs",
  *   email with the PDF to nathita.t@ (cc piriya.t@).
  * Owner property registrations (form: "owner"):
- *   row in the "Owner Listings" tab, PDF + the owner's photos in their own folder inside
- *   "Nexspace Owner Listings", email to info@ (cc nathita.t@, piriya.t@) with the PDF and photos attached
- *   (photos over ~20 MB in total stay in Drive and the email links to the folder).
+ *   row in the "Owner Listings" tab, PDF in its own folder inside "Nexspace Owner Listings",
+ *   email with the PDF to nathita.t@ (cc piriya.t@).
  */
 const TO = 'nathita.t@nexspace-realty.com';
 const CC = 'piriya.t@nexspace-realty.com';
 const SHEET_NAME = 'Enquiries';
 const FOLDER_NAME = 'Nexspace Enquiry PDFs';
 
-const OWNER_TO = 'info@nexspace-realty.com';
-const OWNER_CC = 'nathita.t@nexspace-realty.com,piriya.t@nexspace-realty.com';
+const OWNER_TO = 'nathita.t@nexspace-realty.com';
+const OWNER_CC = 'piriya.t@nexspace-realty.com';
 const OWNER_SHEET_NAME = 'Owner Listings';
 const OWNER_FOLDER_NAME = 'Nexspace Owner Listings';
 const MAX_ATTACH_BYTES = 20 * 1024 * 1024;
